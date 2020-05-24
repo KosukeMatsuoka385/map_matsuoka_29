@@ -7,27 +7,13 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/exif-js/2.2.1/exif.min.js"></script>
   <script src="js/jquery.exif.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=[API KEY]&callback=initMap"
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfs6Ha3xt7UwbkWf4FwHvt07o72dcQjkc&callback=initMap"
     async defer></script>
-  <style>
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-
-    #map {
-      height: 500px;
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
 
 <body>
   <h3>exif</h3>
   <input id="file-input" type="file" />
-  <!-- <div>
-    <input type="button" id="exif" value="実行" />
-  </div> -->
   <div id="result"></div>
   <select id="type">
     <option value="ROADMAP">ROADMAP</option>
@@ -36,122 +22,14 @@
     <option value="TERRAIN">TERRAIN</option>
   </select>
   <div id="map"></div>
+  <input id="search" type="text">
+  <input type="button" value="search">
 </body>
 
 <script>
-  // let result = document.querySelector("#exif");
-
-  // result.addEventListener("click", function () {
-  //   var file_input = $('#file-input');
-  //   var file = file_input[0].files[0];
-  //   // FileReaderで選択したファイルの読み込み
-  //   var fileReader = new FileReader();
-  //   fileReader.onload = function (e) {
-  //     var bytes = e.target.result;
-  //     // EXIF.readFromBinaryFileでexifの解析
-  //     var exif = EXIF.readFromBinaryFile(bytes);
-  //     console.log(exif);
-  //     // 結果を表示
-  //     var result = '';
-  //     // EXIF.getTag(this, "[exifのタグ名]")で、値を取得
-  //     result += 'DateTimeOriginal:' + exif['DateTimeOriginal'];
-  //     result += '<br>';
-  //     result += 'GPSLatitudeRef: "N":';
-  //     result += '<br>';
-  //     result += 'GPSLatitude:' + exif['GPSLatitude'];
-  //     result += '<br>';
-  //     result += 'GPSLongitudeRef: "E":';
-  //     result += '<br>';
-  //     result += 'GPSLongitude:' + exif['GPSLongitude'];
-  //     $('#result').html(result);
-  //   };
-  //   fileReader.readAsArrayBuffer(file);
-  // });
-
-  let map;
-
-  const zoom = 8; //zoom値１〜２０
-  let typeid;
-  let marker;
-
-  function initMap() {
-    $('input').change(function () {
-      $(this).fileExif(function (exif, lat, lng) {
-        if (!exif) {
-          console.log("exif情報なし");
-          return;
-        }
-        if (!exif.GPSLatitude) {
-          console.log("GPS情報なし");
-          return;
-        }
-        var lat = exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + (exif.GPSLatitude[2] / 3600);
-        var lng = exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + (exif.GPSLongitude[2] / 3600);
-        console.log({
-          lat,
-          lng
-        });
-        // return {
-        //   lat,
-        //   lng
-        // };
-        let center = {
-          lat: lat,
-          lng: lng
-        }
-        console.log(center);
-        //div#mapを「GoogleMap」化
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: center, // 地図の中心を指定
-          zoom: zoom, //Zoom値設定
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
-
-        marker = new google.maps.Marker({ // マーカーの追加
-          position: center, // マーカーを立てる位置を指定
-          map: map // マーカーを立てる地図を指定
-        });
-      });
-    });
-
-    var geocoder;
-
-    geocoder = new google.maps.Geocoder();
-    geocoder.geocode({
-      'address': '東京都千代田区神田小川町3-28-9' // TAM 東京
-    }, function (results, status) { // 結果
-      if (status === google.maps.GeocoderStatus.OK) { // ステータスがOKの場合
-        map = new google.maps.Map(document.getElementById('sample'), {
-          center: results[0].geometry.location, // 地図の中心を指定
-          zoom: 19 // 地図のズームを指定
-        });
-        marker = new google.maps.Marker({
-          position: results[0].geometry.location, // マーカーを立てる位置を指定
-          map: map // マーカーを立てる地図を指定
-        });
-      } else { // 失敗した場合
-        alert(status);
-      }
-    });
-  }
-
-  document.querySelector("#type").onchange = function () {
-    console.log(typeid);
-    typeid = this.value;
-    if (typeid == "ROADMAP") {
-      map.setMapTypeId('roadmap')
-    }
-    if (typeid == "SATELLITE") {
-      map.setMapTypeId('satellite')
-    }
-    if (typeid == "HYBRID") {
-      map.setMapTypeId('hybrid')
-    }
-    if (typeid == "TERRAIN") {
-      map.setMapTypeId('terrain')
-    }
-  }
+  
 </script>
+<script src="js/main.js"></script>
 </head>
 
 
